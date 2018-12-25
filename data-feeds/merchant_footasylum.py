@@ -49,15 +49,17 @@ with open('datafeed_525247.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     for row in csv_reader:
-        print(f'Processing item line: {line_count+1} - name: {row[1]} rrp price: {row[21]} sale price: {row[7]}')
+        # print(f'Processing item line: {line_count+1} - name: {row[1]} rrp price: {row[21]} sale price: {row[7]}')
         if line_count == 0:
-            # print(f'Column names are {", ".join(row)}')
-            # aw_deep_link, product_name, merchant_product_id, merchant_image_url, description, merchant_category, merchant_name, merchant_id, search_price, rrp_price
+            # Actual columns from Awin file are:
+            # aw_deep_link, product_name, aw_product_id, merchant_product_id, merchant_image_url, description, merchant_category, search_price, merchant_name, merchant_id, category_name, category_id, aw_image_url, currency, store_price, delivery_cost, merchant_deep_link, language, last_updated, display_price, data_feed_id, rrp_price, saving, product_price_old
             # cols = (f'{row[0]}, {row[1]}, {row[3]}, {row[4]}, {row[5]}, {row[6]}, {row[8]}, {row[9]}, {row[7]}, {row[21]}, uhp_category')
+
             # Woocommerce Columns for import
             # External URL, Name, ID, Images, Description, x, x, x, Sale price, Regular price, Categories
             # cols = (f'External URL, Name, SKU, Images, Description, {row[6]}, {row[8]}, {row[9]}, Sale price, Regular price, Categories, Type')
-            cols = (f'Name, SKU, Images, Short Description, {row[6]}, {row[8]}, {row[9]}, Sale price, Regular price, Categories, External URL, Type')
+            # cols = (f'Name, SKU, Images, Short Description, {row[6]}, {row[8]}, {row[9]}, Sale price, Regular price, Categories, External URL, Type')
+            cols = (f'External URL, Name, Images, Sale price, Regular price, Categories, Type')
             # print(f'Column names are {(cols)}')
             data.append(cols)
         else:
@@ -65,8 +67,13 @@ with open('datafeed_525247.csv') as csv_file:
                 # print(f'HALF PRICE..... {row[0]}, {row[1]}, {row[3]}, {row[4]}, {row[5]}, {row[6]}, {row[8]}, {row[9]}, {row[7]}, {row[21]}')
                 # aw_deep_link, product_name, merchant_product_id, merchant_image_url, description, merchant_category, merchant_name, merchant_id, search_price, rrp_price
                 # item = (f'"{row[0]}", "{row[1]}", "{row[3]}", "{row[4]}", "{row[5]}", "{row[6]}", "{row[8]}", "{row[9]}", {row[7]}, {row[21]}') + ", \"" + uhp.replace_category(row[6]) + "\"" + ", \"external\""
-                item = (f'"{row[5]}", "{row[3]}", "{row[4]}", "{row[1]}", "{row[6]}", "{row[8]}", "{row[9]}", {row[7]}, {row[21]}, "{uhp.replace_category(row[6])}", "{row[0]}", \"simple\"')
+                # item = (f'"{row[5]}", "{row[3]}", "{row[4]}", "{row[1]}", "{row[6]}", "{row[8]}", "{row[9]}", {row[7]}, {row[21]}, "{uhp.replace_category(row[6])}", "{row[0]}", \"simple\"')
+
+                # Column mappings Awin -> UHP:
+                # aw_deep_link, description, merchant_image_url, search_price, rrp_price, merchant_category, custom field is Type
+                item = (f'"{row[0]}", "{row[5]}", "{row[4]}", "{row[7]}", {row[21]}, "{uhp.replace_category(row[6])}", \"simple\"')
                 data.append(item)
+                print(f'UHP Item found line: {line_count+1} -> {item}')
         line_count += 1
 
     print(f'\nProcessed {int(line_count) -1} lines items. \r\n Under Half Price Items found: {len(data) -1}')
