@@ -1,4 +1,6 @@
 import csv
+import sys
+import time
 
 class Uhp:
 
@@ -43,9 +45,10 @@ category_dict = {'Womens': 'Ladies',
                  'Mens Footwear': 'Shoes'
                  }
 uhp = Uhp()
+print('Opening source CSV: ' + sys.argv[1])
 
 data = [];
-with open('datafeed_525247.csv') as csv_file:
+with open(sys.argv[1]) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     for row in csv_reader:
@@ -78,7 +81,8 @@ with open('datafeed_525247.csv') as csv_file:
 
     print(f'\nProcessed {int(line_count) -1} lines items. \r\n Under Half Price Items found: {len(data) -1}')
 
-with open( 'datafeed_uhp_output.csv', "w") as csv_file:
+filetimestr = 'datafeed_uhp_' + time.strftime("%Y%m%d-%H%M%S") + '.csv'
+with open( filetimestr, "w") as csv_file:
     # writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONE, escapechar=' ')
     for line in data:
         # print(line)
@@ -86,4 +90,4 @@ with open( 'datafeed_uhp_output.csv', "w") as csv_file:
         csv_file.write('\n')
     # writer.writerows([data])
 
-    print(f'Output written to file: datafeed_uhp_output.csv')
+    print(f'Output written to file: ' + filetimestr)
