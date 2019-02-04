@@ -77,14 +77,14 @@ with gzip.open(response) as csv_file:
             # aw_deep_link, product_name, aw_product_id, merchant_product_id, merchant_image_url, description, merchant_category, search_price, rrp_price
 
             # Woocommerce Columns for import
-            cols = (f'External URL, Name, Images, Sale price, Regular price, Categories, Type')
+            cols = (f'External URL, SKU, Name, Images, Sale price, Regular price, Categories, Type')
             data.append(cols)
         else:
             if float(row[7]) <= float(row[8]) / 2:
 
                 # Column mappings Awin -> UHP:
-                # aw_deep_link, description, merchant_image_url, search_price, rrp_price, merchant_category, custom field is Type
-                item = (f'"{row[0]}", "{row[5]}", "{row[4]}", "{row[7]}", {row[8]}, "{uhp.replace_category(row[6])}", \"external\"')
+                # aw_deep_link, aw_product_id, merchant_product_id, description, merchant_image_url, search_price, rrp_price, merchant_category, custom field is Type
+                item = (f'"{row[0]}", "{row[2]}", "{row[5]}", "{row[4]}", "{row[7]}", {row[8]}, "{uhp.replace_category(row[6])}", \"external\"')
                 data.append(item)
                 print(f'UHP Item found line: {line_count+1} -> {item}')
         line_count += 1
