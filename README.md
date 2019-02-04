@@ -7,7 +7,7 @@ This script take a CSV file from AWIN using -> Links & Tools / Create-a-Feed opt
 
 With the following fields in exact order:
 ```
-aw_deep_link,product_name,aw_product_id,merchant_product_id,merchant_image_url,description,merchant_category,search_price,rrp_price
+aw_deep_link,aw_product_id,merchant_product_id,product_name,aw_product_id,merchant_product_id,merchant_image_url,description,merchant_category,search_price,rrp_price
 ```
 
 ### To created a download link:
